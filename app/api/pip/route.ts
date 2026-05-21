@@ -2,7 +2,9 @@ import OpenAI from "openai";
 
 export const runtime = "nodejs";
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getClient() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 const SYSTEM = `You are Pip — Fetch's friendly AI helper. Fetch is an Australian pet insurance company rated #1 by Choice Magazine.
 
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
       ? `Current onboarding step: ${context.step ?? "unknown"}. Pet so far: ${JSON.stringify(context.pet ?? {})}.`
       : "";
 
-    const stream = await client.chat.completions.create({
+    const stream = await getClient().chat.completions.create({
       model: "gpt-5.5",
       stream: true,
       messages: [

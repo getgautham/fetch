@@ -3,7 +3,9 @@ import Airtable from "airtable";
 
 export const runtime = "nodejs";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 type Lead = {
   petName: string;
@@ -32,7 +34,7 @@ export async function POST(req: Request) {
   // 1. Personalised note from GPT-5.5
   let note = `${body.petName} is officially covered. Welcome to the pack 🩷`;
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-5.5",
       messages: [
         {
